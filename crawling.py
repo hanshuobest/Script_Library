@@ -28,8 +28,11 @@ import traceback
 timeout = 5
 socket.setdefaulttimeout(timeout)
 
-# classes = ['dog' , 'cat' , 'person' , 'weight scale' , 'ball' , 'shoes' , 'clothes' , 'book' , 'bottle' , 'pen']
-classes = ['dog']
+classes = ['dog' , 'cat' , 'person' , 'weight scale' , 'ball' , 'shoes' , 'clothes' 
+           , 'book' , 'bottle' , 'pen' , 'socks' , 'paper' , 'cellphone' , 'furniture base'
+           , 'weight scale' , 'power strip' , 'Pet feces' , 'glasses' , 'sofa' , 'chair' 
+           , 'table' , 'remote controller' , 'jewelry' , 'Trash can' , 'potted plant']
+
 
 class Crawler:
     # 睡眠时长
@@ -143,29 +146,6 @@ class Crawler:
                 print('url: {}'.format(url))
                 continue
                 
-            # except UnicodeDecodeError as e:
-            #     print(e)
-            #     print('-----UnicodeDecodeErrorurl:', url)
-            # except urllib.error.URLError as e:
-            #     print(e)
-            #     print("-----urlErrorurl:", url)
-            # except socket.timeout as e:
-            #     print(e)
-            #     print("-----socket timout:", url)
-                
-            # else:
-            #     # 解析json
-            #     rsp = rsp.decode()
-            #     rsp = rsp.replace("\'s" , "\\'s")
-            #     rsp_data = json.loads(rsp , strict = False)
-            #     tmp_count += self.save_image(rsp_data, word)
-            #     if tmp_count >= image_count:
-            #         page.close()
-            #         break
-                
-            #     # 读取下一页
-            #     print("下载下一页")
-            #     pn += 60
         print("下载任务结束")
    
 
