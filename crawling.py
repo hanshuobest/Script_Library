@@ -29,10 +29,12 @@ from tqdm import tqdm
 timeout = 5
 socket.setdefaulttimeout(timeout)
 
-classes = ['dog' , 'cat' , 'person' , 'weight scale' , 'ball' , 'shoes' , 'clothes' 
-           , 'book' , 'bottle' , 'pen' , 'socks' , 'paper' , 'cellphone' , 'furniture base'
-           , 'weight scale' , 'power strip' , 'Pet feces' , 'glasses' , 'sofa' , 'chair' 
-           , 'table' , 'remote controller' , 'jewelry' , 'Trash can' , 'potted plant']
+# classes = ['dog' , 'cat' , 'person' , 'weight scale' , 'ball' , 'shoes' , 'clothes' 
+#            , 'book' , 'bottle' , 'pen' , 'socks' , 'paper' , 'cellphone' , 'furniture base'
+#            , 'weight scale' , 'power strip' , 'Pet feces' , 'glasses' , 'sofa' , 'chair' 
+#            , 'table' , 'remote controller' , 'jewelry' , 'Trash can' , 'potted plant']
+
+classes = ['dog']
 
 
 class Crawler:
@@ -75,7 +77,6 @@ class Crawler:
                     urllib.parse.quote(obj_url), urllib.parse.quote(thumb_url))
                 print('url: %s' % obj_url)
 
-                time.sleep(self.time_sleep)
                 suffix = self.get_suffix(obj_url)
                 # 指定UA和referrer，减少403
                 opener = urllib.request.build_opener()
@@ -106,7 +107,8 @@ class Crawler:
             finally:
                 if self.__counter > image_count:
                     break  
-          
+        
+        print("self.__counter： " , self.__counter)  
         return self.__counter
 
     # 开始获取
@@ -120,7 +122,6 @@ class Crawler:
             
             # 设置header防403
             try:
-                # time.sleep(self.time_sleep)
                 req = urllib.request.Request(url=url, headers=self.headers)
                 page = urllib.request.urlopen(req)
                 rsp = page.read()
@@ -129,9 +130,11 @@ class Crawler:
                 rsp = rsp.decode()
                 rsp = rsp.replace("\'" , "\\'")
                 rsp_data = json.loads(rsp , strict = False)
-                tmp_count += self.save_image(rsp_data, word , image_count)
-                
+                tmp_count = self.save_image(rsp_data, word , image_count)
+                print("tmp_count: " , tmp_count)
+                print("image_count: " , image_count)
                 if tmp_count > image_count:
+                    print("tmp_count > image_count")
                     page.close()
                     break
                 
@@ -176,7 +179,7 @@ if __name__ == '__main__':
     parser.add_argument("-d", "--delay", type=float,
                         help="抓取延时（间隔）", default=0.05)
     parser.add_argument("-c" , "--count" , type=int,
-                        help="每个类别图片数量" , default=30)
+                        help="每个类别图片数量" , default=1000)
     args = parser.parse_args()
 
     crawler = Crawler(args.delay)
