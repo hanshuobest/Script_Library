@@ -24,6 +24,7 @@ import urllib.error
 # 设置超时
 import time
 import traceback
+from tqdm import tqdm
 
 timeout = 5
 socket.setdefaulttimeout(timeout)
@@ -119,7 +120,7 @@ class Crawler:
             
             # 设置header防403
             try:
-                time.sleep(self.time_sleep)
+                # time.sleep(self.time_sleep)
                 req = urllib.request.Request(url=url, headers=self.headers)
                 page = urllib.request.urlopen(req)
                 rsp = page.read()
@@ -129,8 +130,6 @@ class Crawler:
                 rsp = rsp.replace("\'" , "\\'")
                 rsp_data = json.loads(rsp , strict = False)
                 tmp_count += self.save_image(rsp_data, word , image_count)
-                print('tmp_count: {}'.format(tmp_count))
-                print("image_count: {}".format(image_count))
                 
                 if tmp_count > image_count:
                     page.close()
@@ -162,7 +161,7 @@ class Crawler:
         self.__start_amount = (start_page - 1) * self.__per_page
         self.__amount = total_page * self.__per_page + self.__start_amount
 
-        for word in classes:
+        for word in tqdm(classes):
            self.get_images(word , count)
             
 
