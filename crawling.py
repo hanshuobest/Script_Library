@@ -128,7 +128,7 @@ class Crawler:
                 
                  # 解析json
                 rsp = rsp.decode()
-                rsp = rsp.replace("\'" , "\\'")
+                rsp = rsp.replace(r"\'" , r"\\'")
                 rsp_data = json.loads(rsp , strict = False)
                 tmp_count = self.save_image(rsp_data, word , image_count)
                 print("tmp_count: " , tmp_count)
