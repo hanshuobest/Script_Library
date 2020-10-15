@@ -7,7 +7,7 @@
 @author      :hscoder
 @versions    :1.0
 @email       :hscoder@163.com
-@usage       :
+@usage       :将脚本放到图片文件夹下执行
 '''
 
 
@@ -16,7 +16,10 @@ from functools import reduce
 import numpy as np
 import cv2
 import sys
-
+from imutils.paths import list_images
+import shutil
+from tqdm import tqdm
+import os
 
 
 """
@@ -65,13 +68,32 @@ def hammingDist(x1, x2):
 
 
 if __name__ == "__main__":
-    # 读取图像
-    img1 = cv2.imread("testImg/1_1.png")
-    img2 = cv2.imread("testImg/3_1.png")
-    # 计算哈希
-    xhash1 = getHash(img1)
-    xhash2 = getHash(img2)
-    # 进行汉明距离度量
-    dist = hammingDist(xhash1, xhash2)
+    current_dir = os.getcwd()
+    image_lst = list(list_images(current_dir))
 
-    print("xhash1: {}\nxhash2: {}\ndist: {}".format(xhash1, xhash2, dist))
+    for i in tqdm(range(len(image_lst))):
+        if image_lst[i] == -1:
+            continue
+        img1 = cv2.imread(image_lst[i])
+        if type(img1) == type(None):
+            continue
+        xhash1 = getHash(img1)
+        for j in tqdm(range(i + 1 , len(image_lst))):
+            if image_lst[j] == -1:
+                continue
+            img2 = cv2.imread(image_lst[j])
+            if type(img2) == type(None):
+                continue
+            xhash2 = getHash(img2)
+
+            dist = hammingDist(xhash1 , xhash2)
+            if dist <= 0.2:
+                os.remove(image_lst[j])
+                print("pic one: " , os.path.basename(image_lst[i]))
+                print("pic two: " , os.path.basename(image_lst[j]))
+                print("---------------------------------------")
+
+                image_lst[j] = -1
+
+
+
