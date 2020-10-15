@@ -13,6 +13,7 @@
 
 # coding:utf-8
 from functools import reduce
+import functools
 import numpy as np
 import cv2
 import sys
@@ -58,7 +59,7 @@ def countOne(x):
         x &= x-1
     return cnt
 
-
+@functools.lru_cache(maxsize=20)
 def hammingDist(x1, x2):
     """计算两个值的汉明距离，即求异或值的二进制位中1的个数
     assert hammingDist(0b001,0b110) == 3
@@ -70,21 +71,33 @@ def hammingDist(x1, x2):
 if __name__ == "__main__":
     current_dir = os.getcwd()
     image_lst = list(list_images(current_dir))
-
+    
+    hash_dict = {}
     for i in tqdm(range(len(image_lst))):
         if image_lst[i] == -1:
             continue
         img1 = cv2.imread(image_lst[i])
         if type(img1) == type(None):
             continue
-        xhash1 = getHash(img1)
+        img1_base_name = os.path.basename(image_lst[i])
+        if img1_base_name in hash_dict:
+            xhash1 = hash_dict[img1_base_name]
+        else:
+            xhash1 = getHash(img1)
+            hash_dict[img1_base_name] = xhash1
         for j in tqdm(range(i + 1 , len(image_lst))):
             if image_lst[j] == -1:
                 continue
             img2 = cv2.imread(image_lst[j])
             if type(img2) == type(None):
                 continue
-            xhash2 = getHash(img2)
+
+            img2_base_name = os.path.basename(image_lst[j])
+            if img2_base_name in hash_dict:
+                xhash2 = hash_dict[img2_base_name]
+            else:    
+                xhash2 = getHash(img2)
+                hash_dict[img2_base_name] = xhash2
 
             dist = hammingDist(xhash1 , xhash2)
             if dist <= 0.2:
