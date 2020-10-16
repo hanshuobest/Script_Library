@@ -27,8 +27,9 @@ import argparse
 from pascal_voc_io import PascalVocWriter, XML_EXT
 
 
-classes = ['cat', 'dog', 'person', 'bottle', 'chair', 'pottedplant', 'sports ball', 'baseball bat', 'cup', 'fork', 'knife', 'spoon', 'bowl',
-           'banana', 'apple', 'orange', 'chair', 'sofa', 'toile', 'mouse', 'cell phone', 'book', 'vase', 'teddy bear', 'toothbrush', 'hair drier']
+classes = ['cat', 'dog', 'person', 'bottle', 'chair', 'potted plant',
+           'sports ball', 'cup', 'chair', 'toilet', 'mouse', 'cell phone', 'remote',
+           'book']
 
 
 def catid2name(coco):
@@ -41,11 +42,13 @@ def catid2name(coco):
 
 def convert_coco2_voc(json_file, save_dir):
     coco = COCO(json_file)
-    clsIds = coco.getCatIds(catNms=classes)
     classes_dict = catid2name(coco)
 
     for cat in classes:
         catIds = coco.getCatIds(catNms=[cat])
+        if len(catIds) == 0:
+            continue
+        
         imgIds = coco.getImgIds(catIds=catIds)
         for imgId in tqdm(imgIds):
             img = coco.loadImgs(imgId)[0]
@@ -54,7 +57,7 @@ def convert_coco2_voc(json_file, save_dir):
             width = img['width']
 
             annIds = coco.getAnnIds(
-                imgIds=img['id'], catIds=clsIds, iscrowd=None)
+                imgIds=img['id'], catIds=catIds, iscrowd=None)
             anns = coco.loadAnns(annIds)
             if len(anns) == 0:
                 continue
@@ -78,14 +81,11 @@ def convert_coco2_voc(json_file, save_dir):
                         writer.addBndBox(xmin, ymin, xmax, ymax, name, 0)
             writer.save(os.path.join(save_dir, filename.replace("jpg", "xml")))
 
-            # to do
-            # save_annotations
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-j', '--json', help='json file',
-                        default='/home/han/project/Data/CoCo/annotations/instances_train2017.json')
+                        default='instances_train2017.json')
     parser.add_argument('-x', '--xml', help='save xml dir', default='xml')
     args = vars(parser.parse_args())
     if os.path.exists(args['xml']):
