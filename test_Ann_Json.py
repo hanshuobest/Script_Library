@@ -36,6 +36,9 @@ if __name__ == '__main__':
     json_lsts = glob.glob(os.getcwd() + "/*.json")
     jpg_lsts = glob.glob(os.getcwd() + "/*.jpg")
     
+    label = os.getcwd().split('/')[-1]
+    print(label)
+    
     jprocess = JsonProcess()
 
     for j in json_lsts:
@@ -46,14 +49,6 @@ if __name__ == '__main__':
             print('delete the json:%s' % (j))
             os.remove(j)
             
-        info = jprocess.read_json(j)
-        if len(info['shapes']) > 1:
-            print(j)
-            first_info = info['shapes'][0]
-            info['shapes'] = []
-            info['shapes'].append(first_info)
-            
-            jprocess.write_json(info , j)
     for jpg in jpg_lsts:
         json_name = jpg[:-4] + ".json"
         if os.path.exists(json_name):
@@ -61,3 +56,22 @@ if __name__ == '__main__':
         else:
             print(jpg)
             os.remove(jpg)
+            
+            
+    json_lsts = glob.glob(os.getcwd() + "/*.json")
+    for j in json_lsts:
+        info = jprocess.read_json(j)
+        new_json_name = os.path.join(os.path.dirname(j) , label + "_" + os.path.basename(j))
+        info['imagePath'] = new_json_name
+        
+        if len(info['shapes']) > 1:
+            print(j)
+            first_info = info['shapes'][0]
+            info['shapes'] = []
+            info['shapes'].append(first_info)
+            
+        jprocess.write_json(info ,new_json_name)
+        os.remove(j)
+        
+        new_img_name = new_json_name.replace(".json", ".jpg")
+        os.rename(j.replace(".json" , ".jpg"), new_img_name)
