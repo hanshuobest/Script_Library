@@ -9,7 +9,7 @@ import os
 import glob
 import shutil
 import argparse
-import tqdm
+from tqdm import tqdm
 import time
 
 def filter_xml(xml_path , class_id , newdir):
@@ -32,8 +32,7 @@ def filter_xml(xml_path , class_id , newdir):
 			shutil.copyfile(xml_path[:-3] + suffix , newdir + '/' + os.path.basename(xml_path)[:-3] + suffix)
 
 if __name__ == '__main__':
-	classes = [5 ,  6 ,  9 ,  10 ,  16 ,  20 ,  24 ,  30 ,  37 ,  40 ,  41 ,  42 ,  44 ,  46 ,  61 ,  63 ,  64 ,  65 ,  66 ,  67 ,  74 ,  75 ,  77 ,  78 ,  85 ,  88 ,  90 ,  91 ,  94 ,  104 ,  105 ,  122 ,  127 ,  139 ,  140 ,  141 ,  142 ,  143 ,  144 ,  145 ,  146]
-	
+        classes = ['wire' , 'hair' , 'pen']	
 	for i in classes:
 		new_dir = str(i) + "-sku"
 		if os.path.exists(new_dir):
@@ -59,7 +58,7 @@ if __name__ == '__main__':
         	elif os.path.exists(i[:-3] + "png"):
                 	suffix = "png"
 		for element_obj in element_objs:
-			class_name = int(element_obj.find('name').text)
+			class_name = element_obj.find('name').text.strip()
 			if class_name in classes:
 				new_dir = os.path.join(os.getcwd() , str(class_name) + "-sku")
 				shutil.copyfile(i , new_dir + "/" + os.path.basename(i))
