@@ -51,11 +51,11 @@ if __name__ == '__main__':
         for i in num_lst:
             if i in train:
                 shutil.copyfile(xml_lsts[i], os.getcwd() + "/" + train_dir + "/" + os.path.basename(xml_lsts[i]))
-                shutil.copyfile(xml_lsts[i][:-3] + "png", os.getcwd() + "/" + train_dir + "/" + os.path.basename(xml_lsts[i])[:-3] + "png")
+                shutil.copyfile(xml_lsts[i][:-3] + "jpg", os.getcwd() + "/" + train_dir + "/" + os.path.basename(xml_lsts[i])[:-3] + "jpg")
             else:
 	            shutil.copyfile(xml_lsts[i], os.getcwd() + "/" + test_dir + "/" + os.path.basename(xml_lsts[i]))
-	            shutil.copyfile(xml_lsts[i][:-3] + "png",
-	                            os.getcwd() + "/" + test_dir + "/" + os.path.basename(xml_lsts[i])[:-3] + "png")
+	            shutil.copyfile(xml_lsts[i][:-3] + "jpg",
+	                            os.getcwd() + "/" + test_dir + "/" + os.path.basename(xml_lsts[i])[:-3] + "jpg")
 	            
 	    
                 
