@@ -17,9 +17,10 @@ import email.mime.text
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+import os
 
 
-def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, subject='', content=''):
+def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, attach_file , subject='', content=''):
     '''
     :param smtp_host: 域名
     :param smtp_port: 端口
@@ -37,12 +38,12 @@ def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, subject
     content = content
     txt = email.mime.text.MIMEText(content, 'plain', 'utf-8')
     msg.attach(txt)
-
-    # 添加附件地址
+    
     part = MIMEApplication(
-        open(r'test.txt', 'rb').read())
+        open(attach_file , 'rb').read()
+    )
     part.add_header('Content-Disposition', 'attachment',
-                    filename="test.txt")  # 发送文件名称
+                    filename=os.path.basename(attach_file))  # 发送文件名称
     msg.attach(part)
 
     try:
@@ -62,9 +63,17 @@ def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, subject
         print(f"发送失败，Exception: e={e}")
 
 
-try:
-    subject = 'Python 测试邮件'
-    content = '这是一封来自 Python 编写的测试邮件。'
-    send_email('smtp.163.com', 465, 'hscoder@163.com', 'DPDLIRFSRFZFRZQB', 'hanshuobest@163.com', subject, content)
-except Exception as err:
-    print(err)
+
+def main():
+    try:
+        subject = 'Python 发送附件'
+        content = '来自智慧的力量'
+        attach_file = "test.txt"
+        send_email('smtp.163.com', 465, 'hscoder@163.com', 'DPDLIRFSRFZFRZQB', 'hanshuobest@163.com', attach_file, subject, content)
+    except Exception as err:
+        print(err)
+
+
+if __name__ == '__main__':
+    main()
+    
