@@ -32,9 +32,9 @@ def filter_xml(xml_path , class_id , newdir):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	# parser.add_argument('--year')
-	parser.add_argument('--id')
+	parser.add_argument('-l' , '--label')
 	args = parser.parse_args()
-	id = str(args.id)
+	id = str(args.label)
 	new_dir = id + "-sku"
 	if os.path.exists(new_dir):
 		shutil.rmtree(new_dir)
