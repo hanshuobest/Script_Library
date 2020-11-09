@@ -17,6 +17,8 @@ from tqdm import tqdm
 import argparse
 from glob import glob
 import xml.etree.cElementTree as ET
+from imutils.paths import list_images
+import cv2
 
 
 def main():
@@ -26,26 +28,37 @@ def main():
 
     current_dir = os.getcwd()
     xml_lst = glob(current_dir + "/*.xml")
-    img_lst = glob(current_dir + "/*.jpg")
+    # img_lst = glob(current_dir + "/*.jpg")
+    img_lst = list(list_images(current_dir))
 
     if len(xml_lst) == 0:
         print("没有xml...")
 
         for i, name in enumerate(img_lst):
+            img = cv2.imread(name)
             new_name = args.header + "_" + str(i) + ".jpg"
-            os.rename(name, os.path.join(os.path.dirname(name), new_name))
+            os.remove(name)
+            cv2.imwrite(os.path.dirname(name) , new_name)
     else:
         for i, name in enumerate(img_lst):
+            img = cv2.imread(name)
             new_name = args.header + "_" + str(i) + ".jpg"
-            os.rename(name, os.path.join(os.path.dirname(name), new_name))
+            os.remove(name)
+            cv2.imwrite(os.path.join(os.path.dirname(name) , new_name) , img)
             
-            xml_name = name.replace(".jpg" , ".xml")
+            suffix = name.split('.')[1]
+            xml_name = name.replace(suffix , "xml")
+            
+            if not os.path.exists(xml_name):
+                continue
+            
             et = ET.parse(xml_name)
             element = et.getroot()
             
             
             element.find('filename').text = new_name
-            et.write(xml_name)
+            et.write(new_name.replace(".jpg" , ".xml"))
+            os.remove(xml_name)
             
             
             
