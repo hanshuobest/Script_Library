@@ -11,6 +11,7 @@
 '''
 
 
+from os import pardir
 import smtplib
 import email.mime.multipart
 import email.mime.text
@@ -18,6 +19,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 import os
+import argparse
 
 
 def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, attach_file , subject='', content=''):
@@ -65,10 +67,14 @@ def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, attach_
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f' , '--file')
+    args = parser.parse_args()
+    
     try:
         subject = 'Python 发送附件'
         content = '来自智慧的力量'
-        attach_file = "test.txt"
+        attach_file = args.file
         send_email('smtp.163.com', 465, 'hscoder@163.com', 'DPDLIRFSRFZFRZQB', 'hanshuobest@163.com', attach_file, subject, content)
     except Exception as err:
         print(err)
