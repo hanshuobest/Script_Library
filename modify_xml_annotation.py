@@ -17,6 +17,7 @@ import glob
 import argparse
 import cv2
 import sys
+from imutils.paths import list_images
 
 
 resolution = [720, 1280]
