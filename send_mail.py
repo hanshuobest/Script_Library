@@ -57,8 +57,9 @@ def send_email(smtp_host, smtp_port, sendAddr, password, recipientAddrs, attach_
         if loginRes and loginRes[0] == 235:
             print(f"登录成功，code = {loginRes[0]}")
             smtpSSLClient.sendmail(sendAddr, recipientAddrs, str(msg))
-            print(f"mail has been send successfully. message:{str(msg)}")
+            #print(f"mail has been send successfully. message:{str(msg)}")
             smtpSSLClient.quit()
+            print('send finished!')
         else:
             print(f"登陆失败，code = {loginRes[0]}")
     except Exception as e:
