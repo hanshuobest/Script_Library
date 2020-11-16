@@ -17,7 +17,9 @@ if __name__ == '__main__':
 			tmp = os.path.join(fpath , f)
 			if not os.path.isfile(tmp):
 				continue
-			if os.path.basename(tmp)[-3:] == "xml" or os.path.basename(tmp)[-3:] == "png" or os.path.basename(tmp)[-3:] == "jpg" or os.path.basename(tmp)[-4:] == "json":
-				print(tmp)
-				shutil.copyfile(tmp , os.getcwd() + "/" + os.path.basename(tmp))
+			if os.path.basename(tmp)[-3:] == "txt" or os.path.basename(tmp)[-3:] == "png" or os.path.basename(tmp)[-3:] == "jpg" or os.path.basename(tmp)[-4:] == "json":
+                            if tmp == os.path.join(os.getcwd() , os.path.basename(tmp)):
+                                continue
+                            else:
+                                shutil.copyfile(tmp , os.getcwd() + "/" + os.path.basename(tmp))
 				os.remove(tmp)
