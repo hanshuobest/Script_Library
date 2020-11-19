@@ -187,7 +187,7 @@ class PascalVocReader:
         return True
 
 
-def write_xml(image_file_name, img_folder_name, img_size, bndbox, label):
+def write_xml(image_file_name, img_folder_name, img_size, bndboxs, labels):
     imagePath = os.path.join(img_folder_name, image_file_name)
     writer = PascalVocWriter(
         img_folder_name,
@@ -197,5 +197,9 @@ def write_xml(image_file_name, img_folder_name, img_size, bndbox, label):
         usrname="auto",
     )
     writer.verified = True
-    writer.addBndBox(bndbox[0], bndbox[1], bndbox[2], bndbox[3], label, 0)
-    writer.save(targetFile=imagePath.split('.')[0] + XML_EXT)
+
+    for i in range(len(bndboxs)):
+        writer.addBndBox(
+            bndboxs[i][0], bndboxs[i][1], bndboxs[i][2], bndboxs[i][3], labels[i], 0
+        )
+    writer.save(targetFile=imagePath.split(".")[0] + XML_EXT)

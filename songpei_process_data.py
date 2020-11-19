@@ -31,41 +31,48 @@ def main():
     for txt_f in txt_lst:
         with open(txt_f, "r") as f:
             all_line = f.readlines()
-            print(txt_f)
+
             if len(all_line) == 0:
                 continue
-
-            per_line = all_line[0].split(" ")
-            per_line[-1] = per_line[-1].strip()
-            per_line = list(map(float, per_line))
-            print(per_line)
 
             image_file_name = txt_f.replace(".txt", ".jpg")
             img_folder_name = os.path.dirname(txt_f)
             img = cv2.imread(image_file_name)
             img_size = img.shape
-            label = None
 
-            if per_line[0] == 0.0 or per_line[0] == 1.0:
-                label = "water"
-            else:
-                label = "water"
+            bndboxs = []
+            labels = []
 
-            cx = per_line[1] * img_size[1]
-            cy = per_line[2] * img_size[0]
-            w = per_line[3] * img_size[1]
-            h = per_line[4] * img_size[0]
+            for line in all_line:
+                per_line = line.split(" ")
+                per_line[-1] = per_line[-1].strip()
+                per_line = list(map(float, per_line))
 
-            bndbox = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
+                label = None
+                if per_line[0] == 0.0:
+                    label = "hair"
+                else:
+                    label = "cluster_hair"
+                    
+                labels.append(label)
 
-            bndbox = list(map(int, bndbox))
+                cx = per_line[1] * img_size[1]
+                cy = per_line[2] * img_size[0]
+                w = per_line[3] * img_size[1]
+                h = per_line[4] * img_size[0]
 
+                bndbox = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2]
+                bndbox = list(map(int, bndbox))
+                
+                bndboxs.append(bndbox)
+
+            
             write_xml(
                 image_file_name=os.path.basename(image_file_name),
                 img_folder_name=img_folder_name,
                 img_size=img.shape,
-                bndbox=bndbox,
-                label=label,
+                bndboxs=bndboxs,
+                labels=labels,
             )
 
 

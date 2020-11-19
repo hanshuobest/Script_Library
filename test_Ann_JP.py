@@ -7,9 +7,8 @@ from imutils.paths import list_images
 
 if __name__ == "__main__":
     xml_lsts = glob.glob(os.getcwd() + "/*.xml")
-    # jpg_lsts = glob.glob(os.getcwd() + "/*.jpg")
     jpg_lsts = list(list_images(os.getcwd()))
-    suffix = jpg_lsts[0].split('.')[1]
+    suffix = jpg_lsts[0].split(".")[1]
 
     for xml in xml_lsts:
         jpg_name = xml[:-4] + "." + suffix
@@ -18,7 +17,7 @@ if __name__ == "__main__":
         else:
             print("delete the xml:%s" % (xml))
             os.remove(xml)
-    scene_dir = "scene"
+    scene_dir = "background"
     if os.path.exists(scene_dir):
         shutil.rmtree(scene_dir)
         os.mkdir(scene_dir)
@@ -26,7 +25,7 @@ if __name__ == "__main__":
         os.mkdir(scene_dir)
 
     for jpg in jpg_lsts:
-        xml_name = jpg.replace(suffix , "xml")
+        xml_name = jpg.replace(suffix, "xml")
         if os.path.exists(xml_name):
             continue
         else:
