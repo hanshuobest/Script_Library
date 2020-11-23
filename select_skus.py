@@ -10,30 +10,12 @@ import xml.etree.cElementTree as ET
 import sys
 
 
-def filter_xml(xml_path, class_id, newdir):
-    et = ET.parse(xml_path)
-    element = et.getroot()
-    element_objs = element.findall('object')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--filter", help="select or filter", default=True)
+    args = parser.parse_args()
 
-    suffix = None
-    if os.path.exists(xml_path[:-3] + "jpg"):
-        suffix = "jpg"
-    elif os.path.exists(xml_path[:-3] + "png"):
-        suffix = "png"
-
-    jpg_dir = os.path.dirname(xml_path)
-
-    for element_obj in element_objs:
-        class_name = element_obj.find('name').text
-        if class_name == class_id:
-            shutil.copyfile(xml_path, newdir + '/' +
-                            os.path.basename(xml_path))
-            shutil.copyfile(xml_path[:-3] + suffix, newdir +
-                            '/' + os.path.basename(xml_path)[:-3] + suffix)
-
-
-if __name__ == '__main__':
-    classes = ['wire', 'hair', 'pen']
+    classes = ["wire", "hair", "pen"]
     for i in classes:
         new_dir = str(i) + "-sku"
         if os.path.exists(new_dir):
@@ -51,7 +33,7 @@ if __name__ == '__main__':
     for i in lsts:
         et = ET.parse(i)
         element = et.getroot()
-        element_objs = element.findall('object')
+        element_objs = element.findall("object")
 
         suffix = None
         if os.path.exists(i[:-3] + "jpg"):
@@ -59,13 +41,18 @@ if __name__ == '__main__':
         elif os.path.exists(i[:-3] + "png"):
             suffix = "png"
         for element_obj in element_objs:
-            class_name = element_obj.find('name').text.strip()
+            class_name = element_obj.find("name").text.strip()
             if class_name in classes:
                 new_dir = os.path.join(os.getcwd(), str(class_name) + "-sku")
                 shutil.copyfile(i, new_dir + "/" + os.path.basename(i))
-                shutil.copyfile(i[:-3] + suffix, new_dir +
-                                "/" + os.path.basename(i)[:-3] + suffix)
+                shutil.copyfile(
+                    i[:-3] + suffix, new_dir + "/" + os.path.basename(i)[:-3] + suffix
+                )
+                
+                if args.filter:
+                    os.remove(i)
+                    os.remove(i.replace("xml" , "jpg"))
             else:
                 break
     cost_time = time.time() - start_time
-    print('cost time:', cost_time)
+    print("cost time:", cost_time)
