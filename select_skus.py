@@ -12,10 +12,10 @@ import sys
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--filter", help="select or filter", default=True)
+    parser.add_argument("-f", "--filter", help="select or filter", action='store_true')
     args = parser.parse_args()
 
-    classes = ["wire", "hair", "pen"]
+    classes = ["wire", "shoes", "bottle"]
     for i in classes:
         new_dir = str(i) + "-sku"
         if os.path.exists(new_dir):
@@ -49,7 +49,8 @@ if __name__ == "__main__":
                     i[:-3] + suffix, new_dir + "/" + os.path.basename(i)[:-3] + suffix
                 )
                 
-                if args.filter:
+                if bool(args.filter):
+                    import pdb;pdb.set_trace()
                     os.remove(i)
                     os.remove(i.replace("xml" , "jpg"))
             else:

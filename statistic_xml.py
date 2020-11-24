@@ -29,7 +29,7 @@ def readAnnotations(xml_path):
         return results
     for element_obj in element_objs:
         result = []
-        class_name = element_obj.find('name').text
+        class_name = element_obj.find('name').text.strip()
         # print('class_name:' , class_name)
         if class_name == None:
             print('the xml class is None , delete the xml :',
