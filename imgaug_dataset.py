@@ -23,6 +23,7 @@ from imgaug import augmenters as iaa
 from pascal_voc_io import write_xml, PascalVocWriter, XML_EXT
 import argparse
 import shutil
+from tqdm import tqdm
 ia.seed(1)
 
 
@@ -109,8 +110,7 @@ if __name__ == "__main__":
     xml_lst = glob(current_dir + "/*.xml")
     img_lst = glob(current_dir + "/*.jpg")
     
-    import pdb; pdb.set_trace()
-    for img_name in img_lst:
+    for img_name in tqdm(img_lst):
         img = Image.open(img_name)
         img = np.array(img)
 
