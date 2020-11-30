@@ -1,20 +1,37 @@
-import os
-from glob import glob
-import shutil
-with open("all_model.txt", "r") as f:
-    all_line = f.readlines()
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+'''
+@filename    :filter.py
+@brief       :过滤获取baby cry audio
+@time        :2020/11/30 15:04:41
+@author      :hscoder
+@versions    :1.0
+@email       :hscoder@163.com
+@usage       :
+'''
 
-img_lsts = glob(os.getcwd() + "/*.jpg")
-save = "save"
-for line in all_line:
-    line = line.strip()
-    full_name = os.path.join(os.getcwd(), line)
-    #print("full_name: " , full_name)
-    if os.path.exists(full_name):
-        print("------------------------------")
-        print(full_name)
-        print("******************************")
-        shutil.move(full_name, os.path.join(save, line))
+import os
+from shutil import rmtree
+import shutil
+
+def main():
+    cry_dir = "cry"
+    if os.path.exists(cry_dir):
+        rmtree(cry_dir)
+        os.mkdir(cry_dir)
     else:
-        print("{} not exists".format(full_name))
-        continue
+        os.mkdir(cry_dir)
+        
+    with open("cry.txt" , "r") as f:
+        all_lines = f.readlines()
+        all_file = []
+        for line in all_lines:
+            name = line.strip()
+            
+            if os.path.exists(name):
+                shutil.copyfile(name , os.path.join(cry_dir , name))
+            
+
+if __name__ == '__main__':
+    main()
+    
