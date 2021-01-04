@@ -145,7 +145,7 @@ if __name__ == "__main__":
             save_img_name = "aug_" + str(i) + os.path.basename(img_name)
             save_img_name = os.path.join(aug_dir, save_img_name)
 
-            Image.fromarray(image_after).save(save_img_name)
+            Image.fromarray(image_aug).save(save_img_name)
 
             bboxes = []
             labels = []
